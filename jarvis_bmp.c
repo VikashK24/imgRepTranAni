@@ -125,6 +125,7 @@ void calling_pattern()
     printf("PaletteEntry: %zu bytes\n", sizeof(BMPColorEntry)); // Should print 4
 
     // 1. CREATE IMAGE STRUCTURE
+    // width and Height of the file
     BMPImage img;
     img.width = 100;
     img.height = 100;
