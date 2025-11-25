@@ -76,9 +76,9 @@ int bmp_write(const char *filename, BMPImage *image)
     }
 
     // Step 1: Calculate sizes
-    int row_padded_width = ((image->width + 3) / 4) * 4;
+    int row_padded_width = ((image->width + 3) / 4) * 4; // multiple of 4
     int pixel_data_size = row_padded_width * image->height;
-    int palette_size = 256 * 4; // 256 entries, 4 bytes each
+    int palette_size = 256 * 4; // 256 entries, 4 bytes each = 1024 bytes
     int file_size = 14 + 40 + palette_size + pixel_data_size;
 
     // Step 2: Update headers
@@ -92,6 +92,8 @@ int bmp_write(const char *filename, BMPImage *image)
     image->info_header.bits_per_pixel = 8;
     image->info_header.compression = 0;
     image->info_header.image_size = pixel_data_size;
+    // image->info_header.x_resolution = 2000;
+    // image->info_header.y_resolution = 4000;
 
     // Step 3: Write file header
     fwrite(&image->file_header, sizeof(BMPFileHeader), 1, file);
@@ -127,26 +129,59 @@ void calling_pattern()
     // 1. CREATE IMAGE STRUCTURE
     // width and Height of the file
     BMPImage img;
-    img.width = 100;
-    img.height = 100;
+    int H = 200, W = 200;
+    img.width = W;
+    img.height = H;
 
     // 2. ALLOCATE MEMORY FOR PIXELS
-    img.pixel_data = malloc(100 * 100);
+    img.pixel_data = calloc(H, W);
+    // img.pixel_data = calloc(H, W);
+
+    int pxLen = sizeof(img.pixel_data);
+
+    printf("the len: %ld\n", sizeof(img.pixel_data));
 
     // 3. FILL PIXELS WITH VALUES (0-255)
-    for (int i = 0; i < 100 * 100; i++)
+    for (int j = 0; j < H * W; j += W)
     {
-        img.pixel_data[i] = 128; // Gray
+        int k = 0;
+        printf("J increment: %d\n", j % 10);
+        for (int i = pxLen; i < j / W; i++)
+        {
+            // if (i <= 100)
+            // {
+
+            img.pixel_data[1600 + k + pxLen] = 255;
+            k++;
+            // }
+            // else
+            // {
+            img.pixel_data[j + i] = 128; // Gray
+            // }
+        }
+    }
+
+    int cx = 100, cy = 50, r = 25;
+
+    for (int y = cy - r; y <= cy + r; y++)
+    {
+        for (int x = cx - r; x <= cx + r; x++)
+        {
+            if ((x - cx) * (x - cx) + (y - cy) * (y - cy) <= r * r)
+            {
+                img.pixel_data[y * W + x] = 128;
+            }
+        }
     }
 
     // 4. ALLOCATE AND CREATE PALETTE
-    img.palette = malloc(256 * sizeof(BMPColorEntry));
+    img.palette = calloc(256, sizeof(BMPColorEntry));
     for (int i = 0; i < 256; i++)
     {
-        img.palette[i].b = i;
-        img.palette[i].g = i;
-        img.palette[i].r = i;
-        img.palette[i].reserved = 0;
+        img.palette[i].b = 25;
+        img.palette[i].g = 255;
+        img.palette[i].r = 255;
+        // img.palette[0].reserved = 0;
     }
 
     // 5. CALL bmp_write()
