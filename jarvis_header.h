@@ -48,4 +48,6 @@ int bmp_write(const char *filename, BMPImage *image);
 BMPImage *bmp_read(const char *filename);
 void rotate_right(unsigned char *src, unsigned char *dst, int old_w, int old_h);
 void image_representation();
-void image_transformation();
+void image_transformation(const char *filename);
+int image_animation();
+extern void delay_ms(int milliseconds);
