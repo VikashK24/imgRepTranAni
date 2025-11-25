@@ -120,7 +120,20 @@ int bmp_write(const char *filename, BMPImage *image)
     return 0;
 }
 
-void calling_pattern()
+void rotate_right(unsigned char *src, unsigned char *dst, int old_w, int old_h)
+{
+    // After rotation: width becomes old_h, height becomes old_w
+    for (int y = 0; y < old_h; y++)
+    {
+        for (int x = 0; x < old_w; x++)
+        {
+            // Map (x, y) from original to (y, old_w - 1 - x) in rotated image
+            dst[x * old_h + (old_h - y - 1)] = src[y * old_w + x];
+        }
+    }
+}
+
+void image_representation()
 {
     printf("FileHeader: %zu bytes\n", sizeof(BMPFileHeader));   // Should print 14
     printf("InfoHeader: %zu bytes\n", sizeof(BMPInfoHeader));   // Should print 40
@@ -200,4 +213,59 @@ void calling_pattern()
     // 7. FREE MEMORY
     free(img.pixel_data);
     free(img.palette);
+}
+
+void image_transformation()
+{
+
+    BMPImage *img = bmp_read("./output2.bmp");
+
+    if (!img)
+    {
+        printf("Error loading img.\n");
+    }
+    else
+    {
+        printf("Width: %d Height: %d\n", img->width, img->height);
+
+        // Print a small region of pixels
+        for (int y = 0; y < 3; y++)
+            for (int x = 0; x < 3; x++)
+                printf("Pixel at (%d,%d): %d\n", x, y, img->pixel_data[y * img->width + x]);
+
+        // Dimensions for the rotated image
+        int old_w = img->width, old_h = img->height;
+        int new_w = old_h, new_h = old_w;
+
+        // Allocate buffer for rotated image
+        unsigned char *rotated = malloc(new_w * new_h);
+
+        // Perform rotation
+        rotate_right(img->pixel_data, rotated, old_w, old_h);
+
+        // Create new BMPImage structure for rotated image
+        BMPImage rotated_img;
+        rotated_img.width = new_w;
+        rotated_img.height = new_h;
+        rotated_img.pixel_data = rotated;
+        rotated_img.palette = malloc(256 * sizeof(BMPColorEntry));
+        for (int i = 0; i < 256; i++)
+        {
+            rotated_img.palette[i].b = img->palette[i].b;
+            rotated_img.palette[i].g = img->palette[i].g;
+            rotated_img.palette[i].r = img->palette[i].r;
+            rotated_img.palette[i].reserved = img->palette->reserved;
+        }
+
+        // Write the rotated image to file
+        bmp_write("output4.bmp", &rotated_img);
+
+        // Free memory for rotated image
+        free(rotated_img.pixel_data);
+        free(rotated_img.palette);
+    }
+
+    // Free memory
+    free(img->pixel_data);
+    free(img);
 }
