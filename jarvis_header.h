@@ -1,5 +1,9 @@
 #include "common.h"
 
+// __attribute__((packed))
+// BMP header might be longer than 14 bytes (adding garbage padding)
+// Packed struct = correct byte layout on disk
+// Unpacked struct = wrong layout, corrupted file
 typedef struct __attribute__((packed))
 {
     uint16_t type;
@@ -42,4 +46,6 @@ typedef struct
 
 int bmp_write(const char *filename, BMPImage *image);
 BMPImage *bmp_read(const char *filename);
-void calling_pattern();
+void rotate_right(unsigned char *src, unsigned char *dst, int old_w, int old_h);
+void image_representation();
+void image_transformation();
