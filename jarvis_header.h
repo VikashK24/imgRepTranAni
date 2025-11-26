@@ -51,3 +51,4 @@ void image_representation();
 void image_transformation(const char *filename);
 int image_animation();
 extern void delay_ms(int milliseconds);
+extern void rotate_right(unsigned char *src, unsigned char *dst, int old_w, int old_h);
