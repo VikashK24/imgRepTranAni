@@ -1,18 +1,19 @@
 #include "bmp_img_crud.c"
 
-void rotate_right(unsigned char *src, unsigned char *dst, int old_w, int old_h)
-{
-    // After rotation: width becomes old_h, height becomes old_w
-    for (int y = 0; y < old_h; y++)
-    {
-        for (int x = 0; x < old_w; x++)
-        {
-            // Map (x, y) from original to (y, old_w - 1 - x) in rotated image
-            dst[x * old_h + (old_h - y - 1)] = src[y * old_w + x];
-        }
-    }
-}
+// void rotate_right(unsigned char *src, unsigned char *dst, int old_w, int old_h)
+// {
+//     // After rotation: width becomes old_h, height becomes old_w
+//     for (int y = 0; y < old_h; y++)
+//     {
+//         for (int x = 0; x < old_w; x++)
+//         {
+//             // Map (x, y) from original to (y, old_w - 1 - x) in rotated image
+//             dst[x * old_h + (old_h - y - 1)] = src[y * old_w + x];
+//         }
+//     }
+// }
 
+// Sriya
 void image_representation()
 {
     printf("FileHeader: %zu bytes\n", sizeof(BMPFileHeader));   // Should print 14
@@ -49,7 +50,7 @@ void image_representation()
             // }
             // else
             // {
-            img.pixel_data[j + i] = 128; // Gray
+            img.pixel_data[j + i] = 128; // Black Shade
             // }
         }
     }
@@ -78,6 +79,7 @@ void image_representation()
     }
 
     // 5. CALL bmp_write()
+    // this function is written in bmp_img_crud.c
     int result = bmp_write("output.bmp", &img);
 
     // 6. CHECK RESULT
@@ -95,9 +97,11 @@ void image_representation()
     free(img.palette);
 }
 
+// Dhanraj
 void image_transformation(const char *filename)
 {
 
+    // this function is coming from bmp_img_crud.c file
     BMPImage *img = bmp_read(filename);
 
     if (!img)
@@ -138,6 +142,7 @@ void image_transformation(const char *filename)
         }
 
         // Write the rotated image to file
+        // this function is coming from bmp_img_crud.c file
         bmp_write("output4.bmp", &rotated_img);
 
         // Free memory for rotated image

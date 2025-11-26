@@ -1,5 +1,5 @@
-a.out: main.o create_test_bmp.o jarvis_bmp.o thor_bmp.o delay.o
-	gcc main.o create_test_bmp.o jarvis_bmp.o thor_bmp.o delay.o
+a.out: main.o create_test_bmp.o jarvis_bmp.o thor_bmp.o delay.o rotate.o
+	gcc main.o create_test_bmp.o jarvis_bmp.o thor_bmp.o delay.o rotate.o
 
 main.o: main.c header.h
 	gcc -c main.c
@@ -15,6 +15,9 @@ thor_bmp.o: thor_bmp.c header.h
 
 delay.o: delay.s
 	as delay.s -o delay.o
+
+rotate.o: rotate.s
+	as rotate.s -o rotate.o
 
 clean: 
 	rm -f *.o a.out *.bmp

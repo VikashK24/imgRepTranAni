@@ -1,5 +1,6 @@
 #include "jarvis_header.h"
 
+// crud stands for Create Read Update Delete
 BMPImage *bmp_read(const char *filename)
 {
     FILE *file = fopen(filename, "rb");
