@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "header.h": "c",
+        "jarvis_header.h": "c",
+        "common.h": "c"
+    }
+}

@@ -95,10 +95,10 @@ void image_representation()
     free(img.palette);
 }
 
-void image_transformation()
+void image_transformation(const char *filename)
 {
 
-    BMPImage *img = bmp_read("./output2.bmp");
+    BMPImage *img = bmp_read(filename);
 
     if (!img)
     {
